@@ -79,4 +79,3 @@ defmodule Lab2.Impl.SC do
     :erlang.phash2(key, cap)
   end
 end
-

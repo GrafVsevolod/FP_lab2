@@ -53,4 +53,3 @@ defmodule Lab2.DictTest do
     assert s2 == 6
   end
 end
-

@@ -30,4 +30,3 @@ defmodule Lab2.SetTest do
     refute Set.member?(s2, 2)
   end
 end
-

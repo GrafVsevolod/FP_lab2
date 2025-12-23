@@ -59,7 +59,6 @@ defmodule Lab2.Dict do
     end)
   end
 
-
   @spec filter(t(k, v), (k, v -> as_boolean(term()))) :: t(k, v) when k: term(), v: term()
   def filter(dict, pred) when is_function(pred, 2) do
     foldl(dict, new(), fn k, v, acc ->
@@ -84,11 +83,10 @@ defmodule Lab2.Dict do
   end
 end
 
-  defimpl Inspect, for: Lab2.Dict do
+defimpl Inspect, for: Lab2.Dict do
   import Inspect.Algebra
 
   def inspect(d, opts) do
     concat(["#Lab2.Dict<size=", to_doc(Lab2.Dict.size(d), opts), ">"])
   end
 end
-

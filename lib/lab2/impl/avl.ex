@@ -9,7 +9,13 @@ defmodule Lab2.Impl.AVL do
   end
 
   @type t(k, v) :: %__MODULE__{root: node(k, v) | nil, size: non_neg_integer()}
-  @type node(k, v) :: %Node{key: k, val: v, h: pos_integer(), left: node(k, v) | nil, right: node(k, v) | nil}
+  @type node(k, v) :: %Node{
+          key: k,
+          val: v,
+          h: pos_integer(),
+          left: node(k, v) | nil,
+          right: node(k, v) | nil
+        }
 
   # --- public-ish ops used by Dict ---
   def new, do: %__MODULE__{}
@@ -40,10 +46,17 @@ defmodule Lab2.Impl.AVL do
   def foldr(%__MODULE__{root: r}, acc, fun), do: fold_revorder(r, acc, fun)
 
   # --- helpers: compare keys ---
-  defp cmp(a, b), do: :erlang.compare(a, b)
+  defp cmp(a, b) do
+    cond do
+      a < b -> :lt
+      a > b -> :gt
+      true -> :eq
+    end
+  end
 
   # --- find ---
   defp find(nil, _k), do: nil
+
   defp find(%Node{key: k} = n, key) do
     case cmp(key, k) do
       :lt -> find(n.left, key)
@@ -59,18 +72,19 @@ defmodule Lab2.Impl.AVL do
   defp bf(%Node{} = n), do: h(n.left) - h(n.right)
 
   # rotations
-  defp rot_right(%Node{left: %Node{left: x2, right: y2} = x} = y) do
+  defp rot_right(%Node{left: %Node{left: _x2, right: y2} = x} = y) do
     new_right = upd_h(%Node{y | left: y2})
     upd_h(%Node{x | right: new_right})
   end
 
-  defp rot_left(%Node{right: %Node{left: x2, right: y2} = y} = x) do
+  defp rot_left(%Node{right: %Node{left: x2, right: _y2} = y} = x) do
     new_left = upd_h(%Node{x | right: x2})
     upd_h(%Node{y | left: new_left})
   end
 
   defp rebalance(%Node{} = n0) do
     n = upd_h(n0)
+
     case bf(n) do
       b when b > 1 ->
         # left heavy
@@ -136,6 +150,7 @@ defmodule Lab2.Impl.AVL do
 
   defp delete_node(%Node{left: nil, right: r}), do: r
   defp delete_node(%Node{left: l, right: nil}), do: l
+
   defp delete_node(%Node{} = n) do
     # replace with inorder successor (min from right)
     {%Node{} = succ, new_right} = pop_min(n.right)
@@ -143,6 +158,7 @@ defmodule Lab2.Impl.AVL do
   end
 
   defp pop_min(%Node{left: nil} = n), do: {n, n.right}
+
   defp pop_min(%Node{} = n) do
     {m, new_left} = pop_min(n.left)
     {m, rebalance(%Node{n | left: new_left})}
@@ -150,6 +166,7 @@ defmodule Lab2.Impl.AVL do
 
   # --- folds ---
   defp fold_inorder(nil, acc, _fun), do: acc
+
   defp fold_inorder(%Node{} = n, acc, fun) do
     acc = fold_inorder(n.left, acc, fun)
     acc = fun.(n.key, n.val, acc)
@@ -157,6 +174,7 @@ defmodule Lab2.Impl.AVL do
   end
 
   defp fold_revorder(nil, acc, _fun), do: acc
+
   defp fold_revorder(%Node{} = n, acc, fun) do
     acc = fold_revorder(n.right, acc, fun)
     acc = fun.(n.key, n.val, acc)

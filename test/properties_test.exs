@@ -42,7 +42,7 @@ defmodule Lab2.PropertiesTest do
   end
 
   property "Dict monoid: identity" do
-    check all d <- gen_dict() do
+    check all(d <- gen_dict()) do
       e = Dict.empty()
       assert Dict.equal?(Dict.append(e, d), d)
       assert Dict.equal?(Dict.append(d, e), d)
@@ -50,7 +50,7 @@ defmodule Lab2.PropertiesTest do
   end
 
   property "Dict monoid: associativity" do
-    check all a <- gen_dict(), b <- gen_dict(), c <- gen_dict() do
+    check all(a <- gen_dict(), b <- gen_dict(), c <- gen_dict()) do
       left = Dict.append(Dict.append(a, b), c)
       right = Dict.append(a, Dict.append(b, c))
       assert Dict.equal?(left, right)
@@ -58,7 +58,7 @@ defmodule Lab2.PropertiesTest do
   end
 
   property "Set monoid: identity + associativity" do
-    check all a <- gen_set(), b <- gen_set(), c <- gen_set() do
+    check all(a <- gen_set(), b <- gen_set(), c <- gen_set()) do
       e = Set.empty()
       assert Set.equal?(Set.append(e, a), a)
       assert Set.equal?(Set.append(a, e), a)
@@ -70,7 +70,7 @@ defmodule Lab2.PropertiesTest do
   end
 
   property "Bag monoid: identity + associativity" do
-    check all a <- gen_bag(), b <- gen_bag(), c <- gen_bag() do
+    check all(a <- gen_bag(), b <- gen_bag(), c <- gen_bag()) do
       e = Bag.empty()
       assert Bag.equal?(Bag.append(e, a), a)
       assert Bag.equal?(Bag.append(a, e), a)
@@ -82,10 +82,9 @@ defmodule Lab2.PropertiesTest do
   end
 
   property "Dict: put then get returns that value" do
-    check all d <- gen_dict(), k <- gen_key(), v <- gen_val() do
+    check all(d <- gen_dict(), k <- gen_key(), v <- gen_val()) do
       d2 = Dict.put(d, k, v)
       assert Dict.get(d2, k) == {:ok, v}
     end
   end
 end
-

@@ -67,11 +67,10 @@ defmodule Lab2.Set do
   def to_list(set), do: foldl(set, [], fn x, acc -> [x | acc] end)
 end
 
-  defimpl Inspect, for: Lab2.Set do
+defimpl Inspect, for: Lab2.Set do
   import Inspect.Algebra
 
   def inspect(s, opts) do
     concat(["#Lab2.Set<size=", to_doc(Lab2.Set.size(s), opts), ">"])
   end
 end
-

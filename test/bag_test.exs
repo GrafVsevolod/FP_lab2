@@ -19,4 +19,3 @@ defmodule Lab2.BagTest do
     assert Bag.count(b3, "a") == 0
   end
 end
-

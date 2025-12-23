@@ -88,11 +88,10 @@ defmodule Lab2.Bag do
   defp unwrap(%__MODULE__{dict: d}), do: d
 end
 
-  defimpl Inspect, for: Lab2.Bag do
+defimpl Inspect, for: Lab2.Bag do
   import Inspect.Algebra
 
   def inspect(b, opts) do
     concat(["#Lab2.Bag<size=", to_doc(Lab2.Bag.size(b), opts), ">"])
   end
 end
-
