@@ -2,23 +2,25 @@ name: Elixir CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: lab2
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Elixir
-        uses: erlef/setup-elixir@v1
+        uses: erlef/setup-beam@v1
         with:
-          elixir-version: '1.15'
-          otp-version: '26'
+          elixir-version: "1.19.4"
+          otp-version: "28.1"
 
       - name: Install dependencies
         run: mix deps.get
